@@ -188,7 +188,7 @@ public class RobotContainer
   {
     return drivebase.driveToPose(new Pose2d(new Translation2d(3.0, 4.0), Rotation2d.fromDegrees(0)));
 
-    // Drive forward 1.0 meter at ~0.4 m/s
+    // Drive forward 1.0 meter at ~0.8 m/s
     //return drivebase.driveToDistanceCommand(1.0, 0.8);
   }
 
