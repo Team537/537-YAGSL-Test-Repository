@@ -186,8 +186,10 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
-    // An example command will be run in autonomous
-    return drivebase.driveToDistanceCommand(1.0, 0.2);
+    return drivebase.driveToPose(new Pose2d(new Translation2d(3.0, 4.0), Rotation2d.fromDegrees(0)));
+
+    // Drive forward 1.0 meter at ~0.8 m/s
+    //return drivebase.driveToDistanceCommand(1.0, 0.8);
   }
 
   public void setMotorBrake(boolean brake)
