@@ -189,7 +189,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     return new SequentialCommandGroup(
-        drivebase.driveToPose(new Pose2d(new Translation2d(2, 4), Rotation2d.fromDegrees(90)))
+      //2.271	2.729
+        drivebase.driveToPose(new Pose2d(new Translation2d(2.271, 2.729), Rotation2d.fromDegrees(30)))
         //drivebase.driveToPose(new Pose2d(new Translation2d(2.6407135903870826, 2.653690085896541), Rotation2d.fromDegrees(180)))
       );
 

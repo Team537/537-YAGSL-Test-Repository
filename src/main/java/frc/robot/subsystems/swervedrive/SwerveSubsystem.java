@@ -65,7 +65,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Enable vision odometry updates while driving. 
    */
-  private final boolean     visionDriveTest = false;
+  private final boolean     visionDriveTest = true;
   /**
    * PhotonVision class to keep an accurate odometry.
    */
@@ -79,11 +79,11 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveSubsystem(File directory)
   {
     boolean blueAlliance = true;
-    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
-                                                                      Meter.of(4)),
+    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1.609),
+                                                                      Meter.of(2.63)),
                                                     Rotation2d.fromDegrees(0))
-                                       : new Pose2d(new  Translation2d(Meter.of(2),
-                                                                      Meter.of(4)),
+                                       : new Pose2d(new  Translation2d(Meter.of(1.609),
+                                                                      Meter.of(2.63)),
                                                     Rotation2d.fromDegrees(0));
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
