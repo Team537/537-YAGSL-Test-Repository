@@ -190,8 +190,9 @@ public class RobotContainer
   {
     return new SequentialCommandGroup(
       //2.271	2.729
-        drivebase.driveToPose(new Pose2d(new Translation2d(2.271, 2.729), Rotation2d.fromDegrees(30)))
-        //drivebase.driveToPose(new Pose2d(new Translation2d(2.6407135903870826, 2.653690085896541), Rotation2d.fromDegrees(180)))
+        drivebase.driveToPose(new Pose2d(new Translation2d(2.271, 2.729), Rotation2d.fromDegrees(30)), .5),
+        drivebase.driveToPoseFine(new Pose2d(new Translation2d(2.271, 2.729), Rotation2d.fromDegrees(30)), .01, 5)
+       // drivebase.driveToPose(new Pose2d(new Translation2d(1.609, 2.63), Rotation2d.fromDegrees(0)))
       );
 
     // Drive forward 1.0 meter at ~0.8 m/s
