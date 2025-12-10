@@ -288,7 +288,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param pose Target {@link Pose2d} to go to.
    * @return PathFinding command
    */
-  public Command driveToPose(Pose2d pose, double errorToleranceMeters) {
+  public Command driveToPose(Pose2d pose) {
 
     // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
@@ -301,12 +301,12 @@ public class SwerveSubsystem extends SubsystemBase {
         constraints,
         edu.wpi.first.units.Units.MetersPerSecond.of(0)); // Goal end velocity in meters/sec
 
-    command = command.onlyWhile(() -> {
-      Pose2d current = getPose();
+    // command = command.onlyWhile(() -> {
+    //   Pose2d current = getPose();
 
-      double posError = current.getTranslation().getDistance(pose.getTranslation());
-      return posError > errorToleranceMeters;
-    });
+    //   double posError = current.getTranslation().getDistance(pose.getTranslation());
+    //   return posError > errorToleranceMeters;
+    // });
 
     // Require rotation if the angle difference between the pose and the robot's
     // position is greater than 5 degrees.
