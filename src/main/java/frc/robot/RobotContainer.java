@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -42,12 +43,13 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY() * -1,
-                                                                () -> driverXbox.getLeftX() * -1)
-                                                            .withControllerRotationAxis(driverXbox::getRightX)
-                                                            .deadband(OperatorConstants.DEADBAND)
-                                                            .scaleTranslation(0.8)
-                                                            .allianceRelativeControl(true);
+  () -> -driverXbox.getLeftY(),
+  () -> -driverXbox.getLeftX())
+.withControllerRotationAxis(() -> -driverXbox.getRightX()) // inverted right stick X
+.deadband(OperatorConstants.DEADBAND)
+.scaleTranslation(0.8)
+.allianceRelativeControl(true);
+
 
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -186,7 +188,11 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
-    return drivebase.driveToPose(new Pose2d(new Translation2d(3.0, 4.0), Rotation2d.fromDegrees(0)));
+    return new SequentialCommandGroup(
+      //2.271	2.729
+        drivebase.driveToPose(new Pose2d(new Translation2d(2.271, 2.729), Rotation2d.fromDegrees(30)))
+        //drivebase.driveToPose(new Pose2d(new Translation2d(2.6407135903870826, 2.653690085896541), Rotation2d.fromDegrees(180)))
+      );
 
     // Drive forward 1.0 meter at ~0.8 m/s
     //return drivebase.driveToDistanceCommand(1.0, 0.8);

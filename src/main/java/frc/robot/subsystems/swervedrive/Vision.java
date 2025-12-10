@@ -149,10 +149,10 @@ public class Vision
       {
 
         var pose = poseEst.get();
-        swerveDrive.addVisionMeasurement(pose.estimatedPose.toPose2d(),
+        swerveDrive.addVisionMeasurement(new Pose2d(pose.estimatedPose.toPose2d().getTranslation(), swerveDrive.getPose().getRotation()),
                                          pose.timestampSeconds,
                                          camera.curStdDevs);
-
+                                         
         SmartDashboard.putNumber("VisionX", pose.estimatedPose.getX());
         SmartDashboard.putNumber("VisionY", pose.estimatedPose.getY());
       }

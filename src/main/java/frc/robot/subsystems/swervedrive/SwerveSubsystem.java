@@ -78,12 +78,12 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public SwerveSubsystem(File directory)
   {
-    boolean blueAlliance = false;
-    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
-                                                                      Meter.of(4)),
+    boolean blueAlliance = true;
+    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1.609),
+                                                                      Meter.of(2.63)),
                                                     Rotation2d.fromDegrees(0))
-                                       : new Pose2d(new  Translation2d(Meter.of(2),
-                                                                      Meter.of(4)),
+                                       : new Pose2d(new  Translation2d(Meter.of(1.609),
+                                                                      Meter.of(2.63)),
                                                     Rotation2d.fromDegrees(0));
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -263,6 +263,17 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
   /**
+   * Targets a rotation
+   * @param rotation the rotation to target
+   * @return the command which will target the rotation
+   */
+  public Command targetRotation(Rotation2d rotation) {
+    return run(
+      () -> drive(getTargetSpeeds(0, 0, rotation))
+    ).until( () -> Math.abs(getHeading().minus(rotation).getDegrees()) < 3); //TODO: Like, make the constant actually constant or something);
+  }
+
+  /**
    * Get the path follower with events.
    *
    * @param pathName PathPlanner path name.
@@ -280,19 +291,25 @@ public class SwerveSubsystem extends SubsystemBase
    * @param pose Target {@link Pose2d} to go to.
    * @return PathFinding command
    */
-  public Command driveToPose(Pose2d pose)
-  {
-// Create the constraints to use while pathfinding
+  public Command driveToPose(Pose2d pose) {
+
+    // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
         swerveDrive.getMaximumChassisVelocity(), 4.0,
         swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
 
-// Since AutoBuilder is configured, we can use it to build pathfinding commands
-    return AutoBuilder.pathfindToPose(
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    Command command = AutoBuilder.pathfindToPose(
         pose,
         constraints,
-        edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
-                                     );
+        edu.wpi.first.units.Units.MetersPerSecond.of(0)); // Goal end velocity in meters/sec
+
+    // Require rotation if the angle difference between the pose and the robot's position is greater than 5 degrees.
+    if (Math.abs(getHeading().minus(pose.getRotation()).getDegrees()) > 5) {
+      command = command.andThen(targetRotation(pose.getRotation()));
+    }
+
+    return command;
   }
 
   /**
